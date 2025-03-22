@@ -31,8 +31,6 @@ export const HeroText = styled.div`
     font-weight: 400;
     margin-top: 1rem;
   }
-
-  
 `;
 
 export const HeroContent = styled.div`

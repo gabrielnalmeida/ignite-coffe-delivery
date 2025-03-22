@@ -2,6 +2,7 @@ import { Button, HeaderContainer } from './styles'
 import { MapPin, ShoppingCart } from 'phosphor-react'
 import LogoSVG from '../../assets/Logo.svg'
 import { NavLink } from 'react-router-dom'
+import { ItemCounter } from './components/ItemCounter'
 
 export function Header() {
   return (
@@ -14,9 +15,12 @@ export function Header() {
           <MapPin size={22} weight='fill' fill='#8047F8' />
           Porto Alegre, RS
         </Button>
-        <Button variant='secondary'>
-          <ShoppingCart size={22} weight='fill' />
-        </Button>
+        <NavLink to='/cart'>
+          <Button variant='secondary'>
+            <ItemCounter />
+            <ShoppingCart size={22} weight='fill' />
+          </Button>
+        </NavLink>
       </nav>
     </HeaderContainer>
   )

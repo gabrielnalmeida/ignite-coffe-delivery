@@ -1,37 +1,16 @@
-import { Minus, Plus, ShoppingCart } from "phosphor-react";
-import { PriceTag, Badge, ShoppingContainer, ShoppingItem, ShoppingItems, CustomInputNumber, CustomInputNumberButton, ShopButton } from "./styles";
+import { ShoppingContainer, ShoppingItems, ShoppingContainerTitle } from "./styles";
+import Products from '../../../../data/products.json';
+import { ProductCard } from "./components/ProductCard";
+
 
 export function ShoppingSection() {
   return (
       <ShoppingContainer>
-        <h2>Nossos cafés</h2>
-
+        <ShoppingContainerTitle>Nossos cafés</ShoppingContainerTitle>
         <ShoppingItems>
-
-
-          <ShoppingItem>
-            <img src="" alt="" />
-            <Badge>
-              Tradicional
-            </Badge>
-            <h2>Expresso Tradicional</h2>
-            <p>O tradicional café feito com água quente e grãos moídos</p>
-            <PriceTag>
-              <h3>R$ <strong>9,00</strong></h3>
-              <CustomInputNumber>
-                <CustomInputNumberButton variant="minus">
-                  <Minus size={14} />
-                </CustomInputNumberButton>
-                <span>1</span>
-                <CustomInputNumberButton variant="plus">
-                  <Plus size={14} />
-                </CustomInputNumberButton>
-              </CustomInputNumber>
-              <ShopButton type="button">
-                <ShoppingCart weight="fill" size={22} />
-              </ShopButton>
-            </PriceTag>
-          </ShoppingItem>
+          {Products.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
         </ShoppingItems>
       </ShoppingContainer>
   )
