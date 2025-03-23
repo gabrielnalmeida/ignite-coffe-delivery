@@ -1,9 +1,9 @@
 import { Minus, Plus, ShoppingCart } from "phosphor-react";
-import { Product as ProductType } from "../../../../../../reducers/products/reducer";
+import { Product as ProductType } from "../../../../../../@types/product";
 import { formatPrice } from "../../../../../../utils/formatPrice";
 import { Badge, BadgeContainer, CustomInputNumber, CustomInputNumberButton, PriceTag, Product, ShopButton } from "./styles";
-import { useContext } from "react";
-import { ProductContext } from "../../../../../../contexts/ProductContext";
+import { useContext, useState } from "react";
+import { ProductContext } from "../../../../../../contexts/ShoppingContext";
 
 interface ProductCardProps {
   product: ProductType;
@@ -12,8 +12,21 @@ interface ProductCardProps {
 export function ProductCard({ product }: ProductCardProps) {
   const { addToCart } = useContext(ProductContext);
 
+  const [quantity, setQuantity] = useState(1);
+
+  const handleQuantity = (variant: 'plus' | 'minus') => {
+    if (variant === 'plus') {
+      setQuantity(quantity + 1);
+    } else {
+      if (quantity > 1) {
+        setQuantity(quantity - 1);
+      }
+    }
+  }
+
   const handleAddToCart = () => {
-    addToCart(product);
+    addToCart(product, quantity);
+    setQuantity(1);
   }
     
   return (
@@ -29,11 +42,11 @@ export function ProductCard({ product }: ProductCardProps) {
       <PriceTag>
         <h3>R$ <strong>{formatPrice(product.price)}</strong></h3>
         <CustomInputNumber>
-          <CustomInputNumberButton variant="minus">
+          <CustomInputNumberButton variant="minus" onClick={() => handleQuantity('minus')}>
             <Minus size={14} />
           </CustomInputNumberButton>
-          <span>1</span>
-          <CustomInputNumberButton variant="plus">
+          <span>{quantity}</span>
+          <CustomInputNumberButton variant="plus" onClick={() => handleQuantity('plus')}>
             <Plus size={14} />
           </CustomInputNumberButton>
         </CustomInputNumber>

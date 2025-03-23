@@ -1,19 +1,21 @@
 import { createContext, useEffect, useReducer } from "react";
-import { Product } from "../reducers/products/reducer";
-import { productReducer } from "../reducers/products/reducer";
+import { Product } from "../@types/product";
+import { productReducer } from "../reducers/Shopping/reducer";
 
 interface ProductContextType {
   shoppingCart: Product[];
-  addToCart: (product: Product) => void;
+  addToCart: (product: Product, quantity: number) => void;
+  increaseQuantity: (product: Product) => void;
+  reduceQuantity: (product: Product) => void;
   removeFromCart: (product: Product) => void;
-  clearCart: () => void;
 }
 
 export const ProductContext = createContext<ProductContextType>({
   shoppingCart: [],
   addToCart: () => {},
+  increaseQuantity: () => {},
+  reduceQuantity: () => {},
   removeFromCart: () => {},
-  clearCart: () => {},
 });
 
 interface ProductContextProviderProps {
@@ -30,7 +32,7 @@ export function ProductProvider({ children }: ProductContextProviderProps) {
       const cartItems = localStorage.getItem('@ignite-coffe-shop:shopping-cart-1.0.0');
 
       if (cartItems) {
-        return { shoppingCart: JSON.parse(cartItems) };
+        initialState.shoppingCart = JSON.parse(cartItems);
       }
 
       return initialState;
@@ -45,20 +47,30 @@ export function ProductProvider({ children }: ProductContextProviderProps) {
     localStorage.setItem('@ignite-coffe-shop:shopping-cart-1.0.0', stateJSON);
   }, [shoppingCart]);
 
-  function addToCart(product: Product) {
-    dispatch({ type: 'ADD_TO_CART', payload: product });
+  function addToCart(product: Product, quantity: number) {
+    dispatch({ type: 'ADD_TO_CART', payload: { product, quantity } });
+  }
+
+  function increaseQuantity(product: Product) {
+    dispatch({ type: 'INCREASE_QUANTITY', payload: product });
+  }
+
+  function reduceQuantity(product: Product) {
+    dispatch({ type: 'REDUCE_QUANTITY', payload: product });
   }
 
   function removeFromCart(product: Product) {
     dispatch({ type: 'REMOVE_FROM_CART', payload: product });
   }
 
-  function clearCart() {
-    dispatch({ type: 'CLEAR_CART' });
-  }
-
   return (
-    <ProductContext.Provider value={{ shoppingCart, addToCart, removeFromCart, clearCart }}>
+    <ProductContext.Provider value={{ 
+      shoppingCart, 
+      addToCart, 
+      increaseQuantity, 
+      reduceQuantity, 
+      removeFromCart 
+      }}>
       {children}
     </ProductContext.Provider>
   );
